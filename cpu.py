@@ -157,7 +157,7 @@ class CPU:
                     self.e = 1
                 else:
                     self.e = 0
-                print(self.e)
+                print(f'Equal Flag: {self.e}')
                 self.pc += 3
 
             elif opcode == JMP:
@@ -165,9 +165,17 @@ class CPU:
                 pass
 
             elif opcode == JEQ:
+                '''
+                If `equal` flag is set (true), jump to the address stored in the given register.
+                '''
                 print('JEQ')
-                pass
-
+                if self.e == 1:
+                    self.pc = self.ram[operand_a]
+                    print(f'JEQ e=1 {self.pc}')
+                else:
+                    self.pc += 2
+                    print(f'JEQ e=0 {self.pc}')
+                
             elif opcode == JNE:
                 print('JNE')
                 pass
