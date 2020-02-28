@@ -103,32 +103,32 @@ class CPU:
             operand_a = self.ram_read(self.pc + 1)
             operand_b = self.ram_read(self.pc + 2)
             if opcode == LDI:
-                print('LDI')
+                # print('LDI')
                 self.reg[operand_a] = operand_b
                 self.pc += 3
             elif opcode == PRN:
-                print('PRN')
+                # print('PRN')
                 print(self.reg[operand_a])
                 self.pc += 2
             elif opcode == MUL:
-                print('MUL')
+                # print('MUL')
                 product = self.reg[operand_a] * self.reg[operand_b]
                 print(product)
                 self.pc += 3
             elif opcode == PUSH:
-                print('PUSH')
+                # print('PUSH')
                 val = self.reg[operand_a]
                 self.reg[SP] -= 1
                 self.ram[self.reg[SP]] = val
                 self.pc += 2
             elif opcode == POP:
-                print('POP')
+                # print('POP')
                 val = self.ram[self.reg[SP]]
                 self.reg[operand_a] = val
                 self.reg[SP] += 1
                 self.pc += 2
             elif opcode == CALL:
-                print('CALL')
+                # print('CALL')
                 val = self.pc + 2
                 reg = self.ram[self.pc + 1]
                 sub = self.reg[reg]
@@ -136,12 +136,12 @@ class CPU:
                 self.ram[self.reg[SP]]=val
                 self.pc=sub  
             elif opcode == RET:
-                print('RET')
+                # print('RET')
                 ret=self.reg[SP]
                 self.pc=self.ram[ret]
                 self.reg[SP]+=1
             elif opcode == ADD:
-                print('ADD')
+                # print('ADD')
                 self.reg[operand_a] += self.reg[operand_b]
                 self.pc += 3
 
@@ -150,38 +150,53 @@ class CPU:
                 Compare the values in two registers.
                 If they are equal, set the Equal `E` flag to 1, otherwise set it to 0.
                 '''
-                print('CMP')
+                # print('CMP')
                 val1 = self.reg[operand_a]
                 val2 = self.reg[operand_b]
                 if val1 == val2:
                     self.e = 1
                 else:
                     self.e = 0
-                print(f'Equal Flag: {self.e}')
+                # print(f'Equal Flag: {self.e}')
                 self.pc += 3
 
             elif opcode == JMP:
-                print('JMP')
-                pass
+                '''
+                Jump to the address stored in the given register.
+
+                Set the `PC` to the address stored in the given register.
+                '''
+                # print('JMP')
+                self.pc = self.reg[operand_a]
+                
 
             elif opcode == JEQ:
                 '''
                 If `equal` flag is set (true), jump to the address stored in the given register.
                 '''
-                print('JEQ')
+                # print('JEQ')
                 if self.e == 1:
-                    self.pc = self.ram[operand_a]
-                    print(f'JEQ e=1 {self.pc}')
+                    self.pc = self.reg[operand_a]
+                    # print(f'JEQ e=1 {self.pc}')
                 else:
                     self.pc += 2
-                    print(f'JEQ e=0 {self.pc}')
+                    # print(f'JEQ e=0 {self.pc}')
                 
             elif opcode == JNE:
-                print('JNE')
-                pass
+                '''
+                If `E` flag is clear (false, 0), jump to the address stored in the given
+                register.
+                '''
+                # print('JNE')
+                if self.e == 0:
+                    self.pc = self.reg[operand_a]
+                    # print(f'JNE e=0 {self.pc}')
+                else:
+                    self.pc += 2
+                    # print(f'JNE e=1 {self.pc}')
 
             elif opcode == HLT:
-                print('HLT')
+                # print('HLT')
                 sys.exit(0)
             else:
                 print(f'I did not understand that command: {opcode}')
